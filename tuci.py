@@ -28,24 +28,40 @@ if __name__ == '__main__':
     root = Tk()
     # Disable window decorations
     root.overrideredirect(True)
+    # Position window in left top corner
+    width = root.winfo_screenwidth()
+    height = root.winfo_screenheight()
+    #root.geometry('+%s+%s' % (width, height)) 
+    root.geometry('+%s+%s' % (10, 50)) 
+    # (..I should really switch to QT..)
 
     try:
         # Try to get clipboard contents
         # NB: alternatives: paperclip
         contents = root.clipboard_get()
     except TclError:
+        # Clipboard is empty
         pass
     # Clipboard is not empty
     if contents:
         # Create notification
-        note = Message(root, text=contents.encode('utf-8'), justify=CENTER, width=200, font=tkFont.Font(size=14))
+        note = Message(
+            root,
+            text='New item: ' + contents.encode('utf-8'),
+            justify=CENTER,
+            width=200,
+            font=tkFont.Font(size=16),
+            bg='black',
+            fg='white',
+            )
         note.pack()
 
         # Define update method
         def add_item():
-            sleep(1)
+            sleep(2)
             # normalize clipboard contents
             try:
+                #print contents
                 # Perform request
                 #reply = get(
                         #'http://suzu.herokuapp.com/add/%s' % contents
