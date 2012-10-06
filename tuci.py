@@ -18,12 +18,24 @@ from requests import (
         RequestException
 )
 
+#import src.pyhk
+from src.pyhk import pyhk
+
 # TODO: for global hotkeys checkout:
 # http://www.schurpf.com/python/python-hotkey-module/
 # http://kaizer.se/wiki/keybinder/
 # http://svn.navi.cx/misc/trunk/python/evdev/evdev.py
 
+def fun():
+
 if __name__ == '__main__':
+  
+    
+    # Bind global hotkey
+    #hot = pyhk.pyhk()
+    hot = pyhk()
+    hot.addHotkey(['Ctrl', 'Alt', '1'], fun)
+    hot.start()
 
     root = Tk()
     # Disable window decorations
