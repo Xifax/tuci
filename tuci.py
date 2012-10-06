@@ -20,6 +20,7 @@ from requests import (
 
 #import src.pyhk
 from src.pyhk import pyhk
+from src.hotkeys import GlobalHotkeyManager
 
 # TODO: for global hotkeys checkout:
 # http://www.schurpf.com/python/python-hotkey-module/
@@ -27,16 +28,6 @@ from src.pyhk import pyhk
 # http://svn.navi.cx/misc/trunk/python/evdev/evdev.py
 
 def fun():
-
-if __name__ == '__main__':
-  
-    
-    # Bind global hotkey
-    #hot = pyhk.pyhk()
-    hot = pyhk()
-    hot.addHotkey(['Ctrl', 'Alt', '1'], fun)
-    hot.start()
-
     root = Tk()
     # Disable window decorations
     root.overrideredirect(True)
@@ -73,7 +64,6 @@ if __name__ == '__main__':
             sleep(2)
             # normalize clipboard contents
             try:
-                #print contents
                 # Perform request
                 #reply = get(
                         #'http://suzu.herokuapp.com/add/%s' % contents
@@ -85,6 +75,7 @@ if __name__ == '__main__':
                 print e
             # Close notification
             root.quit()
+            print contents
             # TODO: not quitting app -> wait for another hotkey event (Windows?)
             #root.withdraw()
 
@@ -93,3 +84,18 @@ if __name__ == '__main__':
         root.after(1000, add_item)
         # Start GUI
         root.mainloop()
+
+def test():
+  print 'lalala'
+
+if __name__ == '__main__':
+  
+    # Bind global hotkey
+    #hot = pyhk()
+    #hot.addHotkey(['Ctrl', 'Alt', '1'], fun)
+    #hot.start()
+    hooker = GlobalHotkeyManager(fun , 'A')
+    #hooker = GlobalHotkeyManager(test , 'A')
+    #hooker.setDaemon(True)
+    hooker.start()
+
