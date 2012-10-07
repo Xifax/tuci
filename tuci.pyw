@@ -120,16 +120,23 @@ class Application(Frame):
         #self.top = Toplevel()
         #self.top.lift(aboveThis=self.master)
 
+    def done(self):
+        self.master.destroy()
+        sys.exit(0)
+
     def __init__(self, master=None):
         Frame.__init__(self, master)
         # Quit on middle click
-        self.master.bind('<Button-2>', quit)
+        #self.master.bind('<Button-2>', quit)
+        #self.master.bind('<Button-2>', done)
         self.pack()
         self.createWidgets()
+        #self.message.bind('<Button-2>', self.done)
         # Bind global hotkey(s)
         self.hooker = GlobalHotkeyManager(self.add_item , 'A')
         self.exampleHooker = GlobalHotkeyManager(self.add_example , 'E')
         self.sendHooker = GlobalHotkeyManager(self.send_item, 'S')
+        self.quitHooker = GlobalHotkeyManager(self.done, 'Q')
         # Should terminate with GUI
         self.hooker.setDaemon(True)
         self.hooker.start()
@@ -137,6 +144,8 @@ class Application(Frame):
         self.exampleHooker.start()
         self.sendHooker.setDaemon(True)
         self.sendHooker.start()
+        self.quitHooker.setDaemon(True)
+        self.quitHooker.start()
 
         # example
         self.example = None
@@ -160,4 +169,4 @@ if __name__ == '__main__':
     # (..I should really switch to QT..)
     app = Application(master=root)
     app.mainloop()
-    root.destroy()
+    #root.destroy()
