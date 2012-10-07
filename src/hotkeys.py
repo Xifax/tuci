@@ -25,9 +25,9 @@ class GlobalHotkeyManager(Thread):
     
     def registerHotkey(self):        
         if not self.user32.RegisterHotKey(None, self.id, self.modifiers, self.vk):
-                print "Unable to register id", id
+            print 'Unable to register id', id, '\n'
         else:
-            print 'registered ' + str(self.id) + ' ' + self.key
+            print 'registered ' + str(self.id) + ' ' + self.key + '\n'
         
     def messageLoop(self):
         try:
@@ -42,7 +42,7 @@ class GlobalHotkeyManager(Thread):
             
         finally:
             self.unregisterHotkeys()
-            print 'ok'
+            print 'Hotkey unregistered\n'
     
     def unregisterHotkeys(self):
         self.user32.UnregisterHotKey(None, self.id)

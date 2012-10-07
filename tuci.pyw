@@ -30,18 +30,45 @@ from src.hotkeys import GlobalHotkeyManager
 
 
 class Application(Frame):
+  
+    def add_example(self):
+        try:
+            self.example = self.master.clipboard_get()
+            self.copied.set('Example: \n' + self.example)
+        except TclError:
+            pass
+    
+    def send_item(self):
+        """Send request to web-app"""
+        if self.example and self.items:
+            self.copied.set('Sending items: \n' + ','.join(self.items))
+            sleep(1)
+            try:
+                # Perform request
+                reply = get(
+                        'http://suzu.herokuapp.com/add/%s/%s' % (self.example, '/'.join(self.items))
+                        ).json
+                self.copied.set(
+                    'Result: %s\nError: %s' %
+                    (reply.get('result'), reply.get('reason', 'None'))
+                    )
+            except RequestException as e:
+                print e
+            self.example = None
+        else:
+            self.copied.set('No items to send')
+
     def add_item(self):
         contents = None
         try:
             # Try to get clipboard contents
             # NB: alternatives: paperclip
             #contents = root.clipboard_get()
-            
+              
             #if 'normal' != self.master.state():
             #self.master.update()
             #self.master.deiconify()
             contents = self.master.clipboard_get()
-            self.copied.set('Adding: \n' + contents)
         except TclError:
             # Clipboard is empty
             pass
@@ -49,22 +76,34 @@ class Application(Frame):
         # Clipboard is not empty
         if contents:
             # In case of very fast response
-            sleep(1)
-            try:
-                # Perform request
-                reply = get(
-                        'http://suzu.herokuapp.com/add/%s' % contents
-                        ).json
-                #print reply.get('result'), reply.get('reason', '')
-                # TODO: log|notify on reply
-                self.copied.set(
-                    'Result: %s\nError: %s' %
-                    (reply.get('result'), reply.get('reason', 'None'))
-                    )
-            except RequestException as e:
-                print e
-            #self.after(1000, self.master.withdraw)
-            #self.master.deiconify()
+            if not self.example:
+                self.copied.set('Adding: \n' + contents)
+                sleep(1)
+                try:
+                    # Should add standalone item if no example
+                    # Perform request
+                    reply = get(
+                            'http://suzu.herokuapp.com/add/%s' % contents
+                            ).json
+                    #print reply.get('result'), reply.get('reason', '')
+                    # TODO: log|notify on reply
+                    self.copied.set(
+                        'Result: %s\nError: %s' %
+                        (reply.get('result'), reply.get('reason', 'None'))
+                        )
+                except RequestException as e:
+                    print e
+                #self.after(1000, self.master.withdraw)
+                #self.master.deiconify()
+            else:
+                message = 'Adding items: \n' + contents
+                if self.items:
+                    message += '\n[' + ','.join(self.items) + ']'
+                self.copied.set(message)
+                self.items.append(contents)
+                self.master.clipboard_clear()
+                self.master.clipboard_append(string=self.example)
+                sleep(1)
 
     def createWidgets(self):
         self.copied = StringVar()
@@ -87,11 +126,21 @@ class Application(Frame):
         self.master.bind('<Button-2>', quit)
         self.pack()
         self.createWidgets()
-        # Bind global hotkey
+        # Bind global hotkey(s)
         self.hooker = GlobalHotkeyManager(self.add_item , 'A')
+        self.exampleHooker = GlobalHotkeyManager(self.add_example , 'E')
+        self.sendHooker = GlobalHotkeyManager(self.send_item, 'S')
         # Should terminate with GUI
         self.hooker.setDaemon(True)
         self.hooker.start()
+        self.exampleHooker.setDaemon(True)
+        self.exampleHooker.start()
+        self.sendHooker.setDaemon(True)
+        self.sendHooker.start()
+
+        # example
+        self.example = None
+        self.items = []
 
 if __name__ == '__main__':
   
