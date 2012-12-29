@@ -4,3 +4,16 @@
 """
     Info popup
 """
+
+# external #
+from PySide.QtGui import (
+        QWidget,
+)
+
+# own #
+from composer import Composer
+
+class Info(QWidget, Composer):
+
+    def __init__(self, parent=None):
+        super(Info, self).__init__(parent)
