@@ -8,4 +8,5 @@ lxml==2.3.6
 jcconv==0.1.2
 # BD-tests
 lettuce==0.2.11
-# TODO: add Pyside and so on
+# Qt
+PySide==1.1.2

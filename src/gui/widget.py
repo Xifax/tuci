@@ -18,6 +18,7 @@ from text import Text
 from info import Info
 from composer import Composer
 from draggable import Draggable
+from src.jp.jdic import JDic
 
 
 # see: http://forum.meego.com/showthread.php?t=1543
@@ -29,7 +30,7 @@ class Widget(QDialog, Composer):
         super(Widget, self).__init__(parent)
 
         # Initialize base gui widgets and objects
-        self.text, self.info = Text(), Info()
+        self.text, self.info = Text(self), Info()
         self.clip = QApplication.clipboard()
 
         # Initialize composition
@@ -40,19 +41,26 @@ class Widget(QDialog, Composer):
         # Initialize events
         self.clip.dataChanged.connect(self.clipped)
 
-        # Initialize styles
+        # Initialize styles and position
+        self.widgetize('Tuci')
+        #self.position()
+        self.scale()
 
 
     def clipped(self):
         """Update view on clipboard change"""
-        # 1. TODO: Parse clipboard contents
+        # 0. Check, if flag 'monitor' is set
+        # 1. Parse clipboard contents
+        # TODO: lookup in separate thread?
+        text = self.clip.text()
+        result = JDic().lookup(text)
         # 2. Update view
-        self.text.update(self.clip.text())
+        self.text.update(text, result)
 
 
     def mouseMoveEvent(self, event):
         if self.moving:
-            self.move(event.globalPos()-self.offset)
+            self.move(event.globalPos() - self.offset)
 
 
     def mousePressEvent(self, event):

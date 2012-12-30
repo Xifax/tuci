@@ -18,3 +18,4 @@ class Draggable(QObject):
         x_w, y_w = self.offset.x(), self.offset.y()
         self.move(x - x_w, y - y_w)
 
+

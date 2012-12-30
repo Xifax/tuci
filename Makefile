@@ -3,3 +3,9 @@ init:
 
 test:
 	lettuce tests
+
+run:
+	python t.pyw
+
+env:
+	virtualenv venv

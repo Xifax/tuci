@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-    Info popup
+    Info popup (additional, aside from translation)
 """
 
 # external #

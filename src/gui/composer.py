@@ -6,7 +6,14 @@
 """
 
 # external #
-from PySide.QtCore import QObject
+from PySide.QtCore import (
+        QObject,
+        Qt
+)
+from PySide.QtGui import (
+        QDesktopWidget,
+        QApplication
+)
 
 class Composer(QObject):
 
@@ -24,10 +31,23 @@ class Composer(QObject):
             self.setLayout(centralLayout)
 
 
-    def style(self):
-        pass
+    def widgetize(self, title = 'Widget'):
+        """Widgetize main window and set title"""
+        #self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        self.setWindowTitle(title)
 
     def position(self):
-        pass
+        """By default, position on top, centered"""
+        resolution = QDesktopWidget().screenGeometry()
+        self.move((resolution.width() - self.frameSize().width()) / 2,
+                  resolution.height() - self.frameSize().height() / 2)
+        #self.move(QApplication.desktop().screen().rect().center()
+                #- self.rect().center())
+
+    def scale(self):
+        """Scale widget to screen"""
+        resolution = QDesktopWidget().screenGeometry()
+        self.resize(resolution.width() / 2, resolution.height() / 6)
+
 
 
