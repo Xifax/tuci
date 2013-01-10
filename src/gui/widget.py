@@ -43,6 +43,20 @@ class Widget(QDialog, Composer):
 
         # Initialize styles and position
         self.widgetize('Tuci')
+        #self.setAttribute(Qt.WA_TranslucentBackground) # remove this
+        #self.setAttribute(Qt.WA_NoSystemBackground)  # remove this too
+        self.setAutoFillBackground(True)
+        # Either this, or use transparent png as a mask
+        # TODO: move into widgetize()
+        self.setWindowOpacity(0.85)
+        # Move to separate qss stylesheet
+        # SEE: http://homyakovda.blogspot.ru/2011/04/blog-post.html
+        self.setStyleSheet('''
+        QWidget {
+          background-color: #a0b0d0;
+          border: 2px solid white;
+        }
+        ''')
         #self.position()
         self.scale()
 

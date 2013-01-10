@@ -74,16 +74,18 @@ class Text(QWidget, Composer):
         """Style html body"""
         # see: https://github.com/thomasf/solarized-css
         # TODO: read from css files based on style
+        # TODO: allow user to pick fonts
+        # TODO: allow for dynamic font-size
         return '''
         <html>
             <style>
                 body {
                     font-size: 1.5em;
+                    font-family: 'A-OTF MainichiNewspapersM Pro L';
                 }
                 a {
                     color: #b58900;
                     text-decoration: none;
-                    font-family: 'Ubuntu Mono', sans-serif;
                 }
                 a:hover { color: #cb4b16; }
                 a:visited { color: #cb4b16; }

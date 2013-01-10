@@ -33,7 +33,7 @@ class Composer(QObject):
 
     def widgetize(self, title = 'Widget'):
         """Widgetize main window and set title"""
-        #self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setWindowTitle(title)
 
     def position(self):

@@ -55,6 +55,7 @@ class Application(Frame):
             except RequestException as e:
                 print e
             self.example = None
+            self.items = []
         else:
             self.copied.set('No items to send')
 
